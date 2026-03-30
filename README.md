@@ -22,7 +22,7 @@ The goal is not to build three disconnected demos. The goal is to build one cohe
 
 Current focus is `Layer 1: Agent`.
 
-The immediate MVP is a Python-based agent that can answer an energy question, call at least one tool, run simple analysis, and return a structured response.
+The immediate MVP is a Python-based agent that acts as an energy analyst. It should answer a utility-style question, call at least one tool, run simple analysis on load and price data, and return a structured response.
 
 UI is not required for the first phase. The first interface can be a CLI script or a small API endpoint.
 
@@ -34,13 +34,13 @@ What it shows:
 - building agentic AI systems
 
 Initial capabilities:
-- user asks an energy question
+- user asks an energy analysis question
 - agent calls one or more tools
 - tool reads data or performs a calculation
 - agent returns insights in a structured format
 
 Example prompt:
-- `Analyze CA energy demand trends and summarize key changes.`
+- `Analyze CAISO load and price trends and summarize key changes.`
 
 ### Layer 2: Evaluation
 
@@ -73,7 +73,13 @@ The first version should stay narrow:
 - one structured output schema
 
 Suggested MVP use case:
-- analyze regional energy demand or pricing data and return a concise summary with structured metrics
+- analyze regional load and pricing data and return a concise summary with structured metrics
+
+Why this use case:
+- directly maps to real utility planning and operations concerns
+- easier to prototype than outage prediction or DER orchestration
+- easy to explain in interviews
+- supports later expansion into forecasting, reliability analysis, and evaluation
 
 ## Initial Tech Direction
 
@@ -108,8 +114,9 @@ docs/
 
 ### Now
 
-- choose the exact layer-1 use case
-- choose an initial dataset or API source
+- lock the layer-1 use case to regional load and pricing analysis
+- choose an initial dataset or API source such as CAISO
+- define 5 to 10 analyst-style sample questions
 - create the repo structure
 - define input and output schemas
 - implement one tool
@@ -137,3 +144,24 @@ To keep the project focused:
 - no multi-agent setup in the MVP
 - no vector database unless the use case actually requires retrieval
 - no unnecessary infrastructure before the core agent works
+
+## Layer 1 Questions To Support
+
+The first version should handle simple analyst-style questions such as:
+
+- `Analyze CAISO load trends over the last 7 days.`
+- `What were the biggest price spikes and when did they happen?`
+- `Summarize peak demand periods for this region.`
+- `Return key metrics and a short analyst summary.`
+
+## Layer 1 Output Shape
+
+The initial structured response should include fields such as:
+
+- `region`
+- `time_range`
+- `peak_demand`
+- `average_price`
+- `notable_spikes`
+- `summary`
+- `notes`
