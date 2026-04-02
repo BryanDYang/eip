@@ -1,0 +1,8 @@
+# Basic packages with no version specified (latest versio will be installed)
+requests
+pandas
+numpy
+pydantic
+markdownify
+pathlib
+
