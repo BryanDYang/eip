@@ -1,7 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
-from app.schemas.analysis import LoadPriceMetrics
+from app.schemas.analysis import LoadPriceMetrics, MultiDayLoadSummary 
 
 def analyze_load_price_data(csv_path: str) -> LoadPriceMetrics:
     # CAISO's CSV is not a normal row-per-record file.
@@ -92,10 +92,17 @@ def analyze_load_price_data(csv_path: str) -> LoadPriceMetrics:
 
 def analyze_multiple_days(csv_paths: list[str]) -> LoadPriceMetrics:
     
-    for csv_path in csv_paths:
+    daily_metrics = [analyze_load_price_data(path) for path in csv_paths]
+    
 
-        analyze_load_price_data(csv_path)
-
-    return 
+    return MultiDayLoadSummary(
+            days_analyzed=days_analyzed,
+            highest_peak_demand=highest_peak_demand,
+            highest_peak_date=highest_peak_date,
+            lowest_minimum_demand=lowest_minimum_demand,
+            lowest_minimum_date=lowest_minimum_date,
+            average_daily_demand=average_daily_demand,
+            daily_metrics=daily_metrics,
+            ) 
 
 

@@ -29,4 +29,16 @@ class LoadPriceMetrics(BaseModel):
     # Spike Threshhold
     spike_threshold: float = Field(description="Spike threshold for demand values")
 
-class 
+class MultiDayLoadSummary(BaseModel):
+    
+    days_analyzed: float = Field(description="Number of days analyzed")
+    highest_peak_demand: float = Field(description="Highest peak demand")
+    highest_peak_date: str = Field(description="Highest peak date")
+    lowest_peak_date: str = Field(description="Lowest peak date")
+    lowest_minimum_demand: float = Field(description="Lowest minimum demand")
+    lowest_minimum_date: str = Field(description="Lowest minimum date")
+    average_daily_demand: float = Field(description="Average daily demand")
+    daily_metrics: list[str] = Field(
+            default_factory=list,
+            description="Daily metrics"
+            )
