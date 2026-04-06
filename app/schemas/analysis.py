@@ -5,7 +5,7 @@ class LoadPriceMetrics(BaseModel):
     peak_demand: float = Field(description="Highest observed demand value")
 
     # Mean demand across all usable time intervals.
-    average_demand: float = Field(description="Average demand across all intervals")
+    avg_demand: float = Field(description="Average demand across all intervals")
 
     # Simple human-readable description of high-demand intervals.
     # default_factory=list avoids using a shared mutable defaults.
@@ -21,24 +21,23 @@ class LoadPriceMetrics(BaseModel):
     time_of_peak: str = Field(description="Peak demand time")
 
     # Minimum demand
-    minimum_demand: float = Field(description="Lowest observed demand value")
+    min_demand: float = Field(description="Lowest observed demand value")
 
     # Minimum demand time
-    time_of_minimum: str = Field(description="Minimum demand time")
+    time_of_min: str = Field(description="Minimum demand time")
 
     # Spike Threshhold
     spike_threshold: float = Field(description="Spike threshold for demand values")
 
 class MultiDayLoadSummary(BaseModel):
     
-    days_analyzed: float = Field(description="Number of days analyzed")
+    days_analyzed: int = Field(description="Number of days analyzed")
     highest_peak_demand: float = Field(description="Highest peak demand")
-    highest_peak_date: str = Field(description="Highest peak date")
-    lowest_peak_date: str = Field(description="Lowest peak date")
-    lowest_minimum_demand: float = Field(description="Lowest minimum demand")
-    lowest_minimum_date: str = Field(description="Lowest minimum date")
-    average_daily_demand: float = Field(description="Average daily demand")
-    daily_metrics: list[str] = Field(
+    highest_peak_date: str = Field(description="Highest peak demand date") 
+    lowest_min_demand: float = Field(description="Lowest minimum demand")
+    lowest_min_date: str = Field(description="Lowest minimum date")
+    avg_daily_demand: float = Field(description="Average daily demand")
+    daily_metrics: list[LoadPriceMetrics] = Field(
             default_factory=list,
-            description="Daily metrics"
+            description="Daily metrics for each analyzed file",
             )

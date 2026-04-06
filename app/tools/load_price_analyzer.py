@@ -51,15 +51,15 @@ def analyze_load_price_data(csv_path: str) -> LoadPriceMetrics:
     peak_demand = float(demand_series["demand"].max())
 
     # Calculate the average demand across all intervals.
-    average_demand = float(demand_series["demand"].mean())
+    avg_demand = float(demand_series["demand"].mean())
 
-    minimum_demand = float(demand_series["demand"].min()) 
+    min_demand = float(demand_series["demand"].min()) 
 
     peak_row = demand_series.loc[demand_series["demand"].idxmax()]
     min_row = demand_series.loc[demand_series["demand"].idxmin()]
 
     time_of_peak = str(peak_row["time"])
-    time_of_minimum = str(min_row["time"])
+    time_of_min = str(min_row["time"])
 
     # Define a "notable spike" simply as any value at or above the 95th percentile.
     # This is not the only possible definition, but it is a reasonable first pass.
@@ -81,27 +81,32 @@ def analyze_load_price_data(csv_path: str) -> LoadPriceMetrics:
     # Return the computed metrics using the schema model.
     return LoadPriceMetrics(
             peak_demand=peak_demand,
-            average_demand=average_demand,
+            avg_demand=avg_demand,
             notable_spikes=notable_spikes,
             report_date=report_date,
             time_of_peak=time_of_peak,
-            minimum_demand=minimum_demand,
-            time_of_minimum=time_of_minimum,
+            min_demand=min_demand,
+            time_of_min=time_of_min,
             spike_threshold=spike_threshold,
             )
 
-def analyze_multiple_days(csv_paths: list[str]) -> LoadPriceMetrics:
-    
+def analyze_multiple_days(csv_paths: list[str]) -> MultiDayLoadSummary:
     daily_metrics = [analyze_load_price_data(path) for path in csv_paths]
     
-
+    if not daily_metrics:
+        raise ValueError("No CSV paths were provided")
+    
+    highest_peak_day = max(daily_metrics, key=lambda day: day.peak_demand)
+    lowest_min_day = min(daily_metrics, key=lambda day: day.min_demand)
+    avg_daily_demand = sum(day.avg_demand for day in daily_metrics) / len(daily_metrics)
+    
     return MultiDayLoadSummary(
-            days_analyzed=days_analyzed,
-            highest_peak_demand=highest_peak_demand,
-            highest_peak_date=highest_peak_date,
-            lowest_minimum_demand=lowest_minimum_demand,
-            lowest_minimum_date=lowest_minimum_date,
-            average_daily_demand=average_daily_demand,
+            days_analyzed=len(daily_metrics),
+            highest_peak_demand=highest_peak_day.peak_demand,
+            highest_peak_date=highest_peak_day.report_date,
+            lowest_min_demand=lowest_min_day.min_demand,
+            lowest_min_date=lowest_min_day.report_date,
+            avg_daily_demand=avg_daily_demand,
             daily_metrics=daily_metrics,
             ) 
 
