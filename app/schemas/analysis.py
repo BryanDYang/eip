@@ -41,3 +41,24 @@ class MultiDayLoadSummary(BaseModel):
             default_factory=list,
             description="Daily metrics for each analyzed file",
             )
+
+class AnalysisRequest(BaseModel):
+    
+    region: str = Field(description="Region")
+    time_range: str = Field(description="Time range")
+    question: str = Field(description="Question to the agent")
+
+class AnalysisResponse(BaseModel):
+
+    region: str = Field(description="Region")
+    time_range: str = Field(description="Time range")
+    daily_metrics: list[LoadPriceMetrics] = Field(
+            default_factory=list,
+            description="Daily metrics for each analyzed file",
+            ) 
+    summary: str = Field(description="Response summary")
+    notes: list[str] = Field(
+            default_factory=list,
+            description="Notes"
+            )
+
