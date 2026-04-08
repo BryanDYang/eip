@@ -1,24 +1,22 @@
-## Now
+## Done
 
-- lock the layer-1 use case to energy analyst for regional load and pricing trends
-- choose the initial dataset or API source
-- start with CAISO if possible
-- define 5 to 10 analyst-style sample questions
 - create the repo structure
-- define input and output schema with Pydantic
-- implement one tool
-- tool goal: load data and calculate basic trend and spike metrics
-- implement one agent flow
-- flow goal: question -> tool call -> structured response
-- test with 5 to 10 sample prompts
+- choose CAISO demand data as the first source
+- define input and output schemas with Pydantic
+- implement one analysis tool for CAISO demand metrics
+
+## In Progress
+
+- finish the layer-1 agent flow so it returns a structured response
+- decide whether the first interface should be CLI or FastAPI
+- write 5 to 10 analyst-style sample questions for validation
 
 ## Next
 
-- expose with FastAPI or CLI
 - add logging
-- add a second tool
+- add a second tool for price or net demand analysis
+- test the agent against a small prompt set
 - add a basic evaluation harness
-- compare structured outputs across a small prompt set
 
 ## Later
 

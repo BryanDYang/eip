@@ -22,9 +22,23 @@ The goal is not to build three disconnected demos. The goal is to build one cohe
 
 Current focus is `Layer 1: Agent`.
 
-The immediate MVP is a Python-based agent that acts as an energy analyst. It should answer a utility-style question, call at least one tool, run simple analysis on load and price data, and return a structured response.
+The current implementation is a Python-based CAISO demand analyst. It loads daily demand CSVs, calculates simple peak and summary metrics, and prepares the project for a structured agent response.
 
 UI is not required for the first phase. The first interface can be a CLI script or a small API endpoint.
+
+## Current Status
+
+Implemented so far:
+
+- repo structure for `app/`, `data/`, `docs/`, `evals/`, and `ui/`
+- Pydantic schemas for analysis requests and responses
+- a CAISO demand analysis tool that computes daily and multi-day metrics
+
+Still in progress:
+
+- wiring the agent flow end to end
+- deciding between CLI and FastAPI for the first interface
+- adding sample prompts and basic validation
 
 ## The Three Layers
 
@@ -36,11 +50,11 @@ What it shows:
 Initial capabilities:
 - user asks an energy analysis question
 - agent calls one or more tools
-- tool reads data or performs a calculation
+- tool reads CAISO demand data or performs a calculation
 - agent returns insights in a structured format
 
 Example prompt:
-- `Analyze CAISO load and price trends and summarize key changes.`
+- `Analyze CAISO demand trends over the last 7 days and summarize key changes.`
 
 ### Layer 2: Evaluation
 
@@ -67,17 +81,17 @@ Planned capabilities:
 The first version should stay narrow:
 
 - one use case
-- one data source
+- one data source: CAISO demand CSVs
 - one tool
 - one agent flow
 - one structured output schema
 
 Suggested MVP use case:
-- analyze regional load and pricing data and return a concise summary with structured metrics
+- analyze regional demand data and return a concise summary with structured metrics
 
 Why this use case:
 - directly maps to real utility planning and operations concerns
-- easier to prototype than outage prediction or DER orchestration
+- easier to prototype than outage prediction, pricing forecasting, or DER orchestration
 - easy to explain in interviews
 - supports later expansion into forecasting, reliability analysis, and evaluation
 
@@ -114,20 +128,16 @@ docs/
 
 ### Now
 
-- lock the layer-1 use case to regional load and pricing analysis
-- choose an initial dataset or API source such as CAISO
+- finish the layer-1 agent flow so it returns a structured response
+- decide whether the first interface should be CLI or FastAPI
 - define 5 to 10 analyst-style sample questions
-- create the repo structure
-- define input and output schemas
-- implement one tool
-- implement one agent flow
-- test with 5 to 10 sample prompts
+- validate the CAISO demand analyzer with a small prompt set
 
 ### Next
 
 - expose the agent through `FastAPI` or a CLI
 - add logging
-- add a second tool
+- add a second tool for price or net demand analysis
 - add a basic evaluation harness
 
 ### Later
