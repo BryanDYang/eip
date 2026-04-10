@@ -42,7 +42,7 @@ class MultiDayLoadSummary(BaseModel):
             description="Daily metrics for each analyzed file",
             )
 
-class AnalysisRequest(BaseModel):
+class AnalysisRequest(BaseModel): 
     
     region: str = Field(description="Region")
     time_range: str = Field(description="Time range")
