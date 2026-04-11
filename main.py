@@ -1,6 +1,5 @@
-from pathlib import Path
-from app.tools.load_price_analyzer import analyze_load_price_data, analyze_multiple_days
 from app.agents.energy_analyst import run_energy_analyst
+from app.core.config import get_caiso_demand_csv_paths
 from app.schemas.analysis import AnalysisRequest
 
 def main() -> None:
@@ -10,11 +9,10 @@ def main() -> None:
         question="Summarize demand patterns and notable spikes."
     )
     
-    data_dir = Path("data/raw/caiso/demand")
-    csv_paths = [str(p) for p in sorted(data_dir.glob("CAISO-demand-*.csv"))]
+    csv_paths = get_caiso_demand_csv_paths()
     
     response = run_energy_analyst(request, csv_paths)
-    print(response)
+    print(response.model_dump_json(indent=2))
 
 if __name__ == "__main__":
-    main() 
+    main()

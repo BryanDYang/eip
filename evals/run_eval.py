@@ -7,6 +7,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.agents.energy_analyst import run_energy_analyst
+from app.core.config import get_caiso_demand_csv_paths
 from app.schemas.analysis import AnalysisRequest
 
 
@@ -127,8 +128,7 @@ def run_eval() -> int:
         baseline = json.load(f)
 
     meta = baseline["meta"]
-    data_dir = Path("data/raw/caiso/demand")
-    csv_paths = [str(p) for p in sorted(data_dir.glob("CAISO-demand-*.csv"))]
+    csv_paths = get_caiso_demand_csv_paths()
 
     passes = 0
     fails = 0
