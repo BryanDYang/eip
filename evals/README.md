@@ -25,6 +25,11 @@ Use this folder for machine-checkable validation data and scripts.
 2. Review PASS/FAIL output per case.
 3. If a case fails due to scope, keep it as known gap and revisit when adding features.
 
+## Regression safety net
+
+1. Run all tests with: `python -m unittest discover -s tests -v`
+2. The regression test `tests/test_eval_regression.py` ensures baseline eval checks keep passing.
+
 ## Notes
 
 - Keep strict numeric checks only for stable metrics.

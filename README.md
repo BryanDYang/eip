@@ -33,12 +33,17 @@ Implemented so far:
 - repo structure for `app/`, `data/`, `docs/`, `evals/`, and `ui/`
 - Pydantic schemas for analysis requests and responses
 - a CAISO demand analysis tool that computes daily and multi-day metrics
+- an agent flow that returns structured `AnalysisResponse`
+- a CLI entrypoint in `main.py`
+- sample analyst questions in `docs/sample_questions.md`
+- baseline eval checks in `evals/expected_baseline.json`
+- eval runner in `evals/run_eval.py`
+- unit tests and regression test under `tests/`
 
 Still in progress:
 
-- wiring the agent flow end to end
-- deciding between CLI and FastAPI for the first interface
-- adding sample prompts and basic validation
+- deciding whether to keep CLI-only for now or add FastAPI next
+- adding logging and expanding edge-case test coverage
 
 ## The Three Layers
 
@@ -128,17 +133,16 @@ docs/
 
 ### Now
 
-- finish the layer-1 agent flow so it returns a structured response
-- decide whether the first interface should be CLI or FastAPI
-- define 5 to 10 analyst-style sample questions
-- validate the CAISO demand analyzer with a small prompt set
+- add logging around request, analysis, and response lifecycle
+- decide whether to keep CLI-only for now or add FastAPI endpoint
+- add edge-case tests for malformed CSV or missing expected rows
+- add eval run history output (timestamp and pass/fail counts)
 
 ### Next
 
-- expose the agent through `FastAPI` or a CLI
-- add logging
+- expose the agent through `FastAPI` (CLI already implemented)
 - add a second tool for price or net demand analysis
-- add a basic evaluation harness
+- expand the evaluation harness with additional datasets and stricter checks
 
 ### Later
 
@@ -160,7 +164,7 @@ To keep the project focused:
 The first version should handle simple analyst-style questions such as:
 
 - `Analyze CAISO load trends over the last 7 days.`
-- `What were the biggest price spikes and when did they happen?`
+- `What were the biggest demand spikes and when did they happen?`
 - `Summarize peak demand periods for this region.`
 - `Return key metrics and a short analyst summary.`
 
@@ -170,8 +174,6 @@ The initial structured response should include fields such as:
 
 - `region`
 - `time_range`
-- `peak_demand`
-- `average_price`
-- `notable_spikes`
+- `daily_metrics` (with peak/min/timing/spike metrics)
 - `summary`
 - `notes`
