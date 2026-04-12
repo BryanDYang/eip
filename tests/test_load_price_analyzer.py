@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 from app.core.config import get_caiso_demand_csv_paths
 from app.tools.load_price_analyzer import analyze_load_price_data, analyze_multiple_days
@@ -22,6 +23,22 @@ class TestLoadPriceAnalyzer(unittest.TestCase):
     def test_analyze_multiple_days_raises_on_empty_csv_paths(self) -> None:
         with self.assertRaises(ValueError):
             analyze_multiple_days([])
+
+    def test_analyze_load_price_data_raises_when_demand_row_missing(self) -> None:
+        temp_csv = Path("data/processed/test-missing-demand.csv")
+        temp_csv.parent.mkdir(parents=True, exist_ok=True)
+        temp_csv.write_text(
+            "Header,00:00,00:05\nNet Demand,100,101\n",
+            encoding="utf-8",
+        )
+
+        try:
+            with self.assertRaises(ValueError) as ctx:
+                analyze_load_price_data(str(temp_csv))
+            self.assertIn("Could not find a Demand row", str(ctx.exception))
+        finally:
+            if temp_csv.exists():
+                temp_csv.unlink()
 
     def test_analyze_multiple_days_summary_values_are_consistent(self) -> None:
         summary = analyze_multiple_days(self.csv_paths)
