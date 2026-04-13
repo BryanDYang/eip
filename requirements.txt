@@ -5,4 +5,7 @@ numpy
 pydantic
 markdownify
 pathlib
+fastapi
+uvicorn
+httpx
 
